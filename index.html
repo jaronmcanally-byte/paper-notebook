@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Paper">
-<meta name="theme-color" content="#ebebe6">
+<meta name="theme-color" content="#e8e2d6">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -15,7 +15,7 @@
 <style>
 /* Layout: e-paper tablet. The sheet fills the whole screen; a thin tool rail overlays the left margin and folds into one round button. */
 :root{
-  --paper:#ebebe6; --fg:#111111; --muted:#5f615c; --line:#b3b4ae; --soft:#d9d9d3;
+  --paper:#e8e2d6; --fg:#22201c; --muted:#6b655b; --line:#bfb7a9; --soft:#dad3c6;
   --ui:-apple-system,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
   --mono:ui-monospace,"SF Mono",Menlo,monospace;
   --railw:60px;
@@ -61,8 +61,8 @@ button{font:inherit;color:inherit}
 .app.collapsed #bRail{margin:0}
 .app.collapsed .head{display:none}
 
-.hint{position:absolute;left:0;right:0;top:40%;text-align:center;color:#6c6e69;font:15px/1.5 var(--ui);pointer-events:none;padding:0 24px}
-.hint b{display:block;font:500 12px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#8b8d87;margin-bottom:4px}
+.hint{position:absolute;left:0;right:0;top:40%;text-align:center;color:#7a7368;font:15px/1.5 var(--ui);pointer-events:none;padding:0 24px}
+.hint b{display:block;font:500 12px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#958d80;margin-bottom:4px}
 
 .pop{position:fixed;z-index:30;background:var(--paper);border:1.5px solid var(--fg);border-radius:4px;padding:12px;display:flex;flex-direction:column;gap:10px;min-width:210px;max-height:90vh;overflow:auto}
 .pop h4{margin:0;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
@@ -81,7 +81,7 @@ button{font:inherit;color:inherit}
 .toggle input{width:20px;height:20px;accent-color:var(--fg)}
 .note{font:12px/1.45 var(--ui);color:var(--muted);max-width:240px;margin:0}
 
-.scrim{position:fixed;inset:0;z-index:40;background:rgba(235,235,230,.8);display:flex;align-items:flex-start;justify-content:center;
+.scrim{position:fixed;inset:0;z-index:40;background:rgba(232,226,214,.82);display:flex;align-items:flex-start;justify-content:center;
   padding-top:calc(env(safe-area-inset-top,0px) + 40px);padding-bottom:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .sheet{width:100%;max-width:540px;max-height:100%;overflow:auto;background:var(--paper);border:1.5px solid var(--fg);border-radius:4px;padding:18px;display:flex;flex-direction:column;gap:14px}
 .sheet-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
@@ -90,7 +90,7 @@ button{font:inherit;color:inherit}
 .nb-row{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:6px;padding:10px;cursor:pointer}
 .nb-row.current{border-color:var(--fg)}
 .cover{width:44px;height:58px;border-radius:2px;border:1px solid var(--fg);position:relative;overflow:hidden;
-  background-image:radial-gradient(circle,#8f918b 1px,transparent 1.3px);background-size:7px 7px;background-position:3px 3px}
+  background-image:radial-gradient(circle,#9c9284 1px,transparent 1.3px);background-size:7px 7px;background-position:3px 3px}
 .nb-meta{min-width:0;display:flex;flex-direction:column;gap:4px}
 .nb-meta input{font:500 15px/1.3 var(--ui);color:var(--fg);background:transparent;border:1px solid transparent;border-radius:4px;padding:3px 5px;margin-left:-6px;width:100%;min-width:0;-webkit-user-select:text;user-select:text}
 .nb-meta input:focus{border-color:var(--line);outline:none}
@@ -103,7 +103,7 @@ button{font:inherit;color:inherit}
 <div class="app" id="app">
   <div class="page" id="page">
     <canvas id="cBg"></canvas><canvas id="cInk"></canvas><canvas id="cLive"></canvas>
-    <div class="hint" id="hint" hidden><b>Blank page</b>Write with your Apple Pencil.<br>Swipe with a finger to turn pages.</div>
+    <div class="hint" id="hint" hidden><b>Blank page</b>Write with your Apple Pencil.<br>Swipe with a finger to turn pages.<br>Double-tap with two fingers to switch to the eraser.</div>
   </div>
 
   <div class="head" id="head">
@@ -166,8 +166,8 @@ button{font:inherit;color:inherit}
 "use strict";
 // Page space matches a reMarkable sheet: 1404 × 1872. The paper pattern continues past the sheet so the screen is paper edge to edge.
 const PW = 1404, PH = 1872;
-const PAPER = "#ebebe6";
-const COLORS = { ink:"#111111", gray:"#6e706c", blue:"#3e5878", red:"#94493f", yellow:"#c7a743" };
+const PAPER = "#e8e2d6";
+const COLORS = { ink:"#22201c", gray:"#6e706c", blue:"#3e5878", red:"#94493f", yellow:"#c7a743" };
 const COLOR_NAMES = { ink:"Black", gray:"Grey", blue:"Blue", red:"Red", yellow:"Yellow" };
 const SIZES = [2.4, 4.2, 7.5];
 const MARK = 5.2;
@@ -265,17 +265,17 @@ function drawStroke(ctx, s){
 const grain = (() => {
   const c = document.createElement("canvas"); c.width = c.height = 160;
   const g = c.getContext("2d"), im = g.createImageData(160, 160);
-  for (let i = 0; i < im.data.length; i += 4) { const v = Math.random() < .5 ? 20 : 250; im.data[i] = im.data[i+1] = im.data[i+2] = v; im.data[i+3] = Math.random() < .5 ? 8 : 0; }
+  for (let i = 0; i < im.data.length; i += 4) { const dark = Math.random() < .5; im.data[i] = dark ? 70 : 255; im.data[i+1] = dark ? 56 : 251; im.data[i+2] = dark ? 40 : 242; im.data[i+3] = Math.random() < .6 ? 12 : 0; }
   g.putImageData(im, 0, 0); return c;
 })();
 // Draws in page units over [x0,x1]×[y0,y1]; upx = screen pixels per page unit (keeps lines at least 1px).
 function drawPaper(ctx, kind, x0, y0, x1, y1, upx){
   ctx.save(); ctx.fillStyle = PAPER; ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
-  ctx.strokeStyle = "rgba(17,17,17,.16)"; ctx.fillStyle = "rgba(17,17,17,.36)"; ctx.lineWidth = Math.max(1 / upx, 1.6);
+  ctx.strokeStyle = "rgba(70,58,44,.16)"; ctx.fillStyle = "rgba(70,58,44,.30)"; ctx.lineWidth = Math.max(1 / upx, 1.6);
   const g = 52;
   if (kind === "lined") {
     ctx.beginPath(); for (let y = 200; y <= y1; y += 66) if (y >= y0) { ctx.moveTo(x0, y); ctx.lineTo(x1, y); } ctx.stroke();
-    ctx.strokeStyle = "rgba(17,17,17,.12)"; ctx.beginPath(); ctx.moveTo(170, y0); ctx.lineTo(170, y1); ctx.stroke();
+    ctx.strokeStyle = "rgba(70,58,44,.12)"; ctx.beginPath(); ctx.moveTo(170, y0); ctx.lineTo(170, y1); ctx.stroke();
   } else if (kind === "grid") {
     ctx.beginPath();
     for (let x = Math.floor(x0 / g) * g; x <= x1; x += g) { ctx.moveTo(x, y0); ctx.lineTo(x, y1); }
@@ -305,7 +305,11 @@ const curPage = () => S.nb && S.pages[S.nb.pages[S.pageIdx]];
 function redrawBg(){
   const pg = curPage();
   drawPaper(bg, pg ? pg.paper : "dots", -V.ox / V.s, -V.oy / V.s, (V.w - V.ox) / V.s, (V.h - V.oy) / V.s, V.s * V.dpr);
-  bg.save(); bg.setTransform(1,0,0,1,0,0); bg.fillStyle = bg.createPattern(grain, "repeat"); bg.fillRect(0, 0, cBg.width, cBg.height); bg.restore();
+  bg.save(); bg.setTransform(1,0,0,1,0,0); bg.fillStyle = bg.createPattern(grain, "repeat"); bg.fillRect(0, 0, cBg.width, cBg.height);
+  // Soft falloff toward the edges, like a sheet lit by a room rather than a screen.
+  const W = cBg.width, H = cBg.height, vg = bg.createRadialGradient(W / 2, H * .45, Math.min(W, H) * .35, W / 2, H / 2, Math.hypot(W, H) * .62);
+  vg.addColorStop(0, "rgba(90,72,50,0)"); vg.addColorStop(1, "rgba(90,72,50,.07)");
+  bg.fillStyle = vg; bg.fillRect(0, 0, W, H); bg.restore();
 }
 function clearCtx(ctx, c){ ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0, 0, c.width, c.height); ctx.restore(); }
 function redrawInk(){ clearCtx(ink, cInk); const pg = curPage(); if (pg) for (const s of pg.strokes) drawStroke(ink, s); updateHint(); }
@@ -414,21 +418,50 @@ function undo(){ const pid = S.nb && S.nb.pages[S.pageIdx], op = S.undo[pid] && 
 function redo(){ const pid = S.nb && S.nb.pages[S.pageIdx], op = S.redo[pid] && S.redo[pid].pop(); if (!op) return; applyOp(op, false); S.undo[pid].push(op); updateNav(); }
 
 /* ---------- input ---------- */
-let active = null, cur = null, erasing = null, swipe = null, liveRaf = 0, eraserPos = null, lastPr = 0.5;
+let active = null, activeType = "", cur = null, erasing = null, swipe = null, liveRaf = 0, eraserPos = null, lastPr = 0.5;
 function toPage(e){ const r = page.getBoundingClientRect(); return [(e.clientX - r.left - V.ox) / V.s, (e.clientY - r.top - V.oy) / V.s]; }
 function pressureOf(e){
   if (e.pointerType === "pen") { const p = e.pressure > 0 ? e.pressure : lastPr; lastPr = lastPr * 0.55 + Math.max(0.12, Math.min(1, p)) * 0.45; return lastPr; }
   return 0.55;
 }
+/* Two-finger double tap switches between the eraser and the last pen. */
+const touches = new Map(); let gesture = null, lastTwoTap = 0, lastDrawTool = "pen";
+page.addEventListener("pointerdown", e => {
+  if (e.pointerType !== "touch") return;
+  touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (touches.size === 2) {
+    swipe = null;
+    if (active !== null && activeType === "touch") { cur = null; endStroke(); }
+    gesture = { t: performance.now(), moved: false };
+  } else if (touches.size > 2) gesture = null;
+});
+page.addEventListener("pointermove", e => {
+  const t = touches.get(e.pointerId); if (!t || !gesture) return;
+  if (Math.hypot(e.clientX - t.x, e.clientY - t.y) > 18) gesture.moved = true;
+});
+function touchEnd(e){
+  if (!touches.delete(e.pointerId) || touches.size || !gesture) return;
+  const g = gesture, now = performance.now(); gesture = null;
+  if (g.moved || now - g.t > 400) { lastTwoTap = 0; return; }
+  if (now - lastTwoTap < 500) { lastTwoTap = 0; toggleEraser(); } else lastTwoTap = now;
+}
+page.addEventListener("pointerup", touchEnd);
+page.addEventListener("pointercancel", touchEnd);
+function toggleEraser(){
+  setTool(S.tool === "eraser" ? lastDrawTool : "eraser");
+  toast(S.tool === "eraser" ? "Eraser" : S.tool === "marker" ? "Highlighter" : "Pen");
+}
+
 page.addEventListener("pointerdown", e => {
   closePops();
   if (!S.ready) return;
+  if (e.pointerType === "touch" && touches.size > 1) return;
   if (e.pointerType === "pen" && !S.fingerExplicit && S.fingerDraw) { S.fingerDraw = false; $("fingerToggle").checked = false; savePrefs({ penSeen: true }); }
   if (active !== null) { if (e.pointerType === "pen") endStroke(); else return; }
   if (e.pointerType === "touch" && !S.fingerDraw) { swipe = { id: e.pointerId, x: e.clientX, y: e.clientY }; return; }
   e.preventDefault();
   try { page.setPointerCapture(e.pointerId); } catch {}
-  active = e.pointerId; lastPr = e.pressure > 0 ? e.pressure : 0.5;
+  active = e.pointerId; activeType = e.pointerType; lastPr = e.pressure > 0 ? e.pressure : 0.5;
   const [x, y] = toPage(e);
   if (S.tool === "eraser") { erasing = []; eraserPos = [x, y]; eraseAt(x, y); drawLive(); return; }
   cur = { t: S.tool === "marker" ? "m" : "p", c: S.color, w: SIZES[S.size], pts: [x, y, pressureOf(e)] };
@@ -505,7 +538,7 @@ function eraseAt(x, y){
 
 /* ---------- tools & popovers ---------- */
 function setTool(t){
-  S.tool = t; savePrefs();
+  S.tool = t; if (t !== "eraser") lastDrawTool = t; savePrefs();
   for (const b of document.querySelectorAll("[data-tool]")) b.setAttribute("aria-pressed", String(b.dataset.tool === t));
   syncSwatch();
 }

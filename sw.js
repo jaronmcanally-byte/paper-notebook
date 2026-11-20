@@ -1,5 +1,5 @@
 // Keeps the app working offline. Network first so updates arrive, cache as fallback.
-const CACHE = "paper-v1";
+const CACHE = "paper-v2";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-180.png", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
